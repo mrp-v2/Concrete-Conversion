@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "concreteconversion",
+  "version": "${version}",
+
+  "name": "Concrete Conversion",
+  "description": "Adds a new, easy way to convert concrete powder into concrete.",
+  "authors": [
+    "mrp_v2",
+    "coolsim"
+  ],
+  "contact": {
+    "homepage": "https://minecraft.curseforge.com/projects/concrete-conversion",
+    "issues": "https://www.curseforge.com/minecraft/mc-mods/concrete-conversion/issues"
+  },
+
+  "license": "Unlicense",
+  "icon": "assets/concreteconversion/ConcreteConversionLogo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.mrp_v2.concreteconversion.ConcreteConversion"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}

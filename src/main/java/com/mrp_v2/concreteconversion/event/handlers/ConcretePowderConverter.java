@@ -4,77 +4,45 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.mrp_v2.concreteconversion.ConcreteConversion;
 import com.mrp_v2.concreteconversion.config.ConfigOptions;
 
+import net.fabricmc.fabric.api.event.server.ServerTickCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ConcretePowderBlock;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraft.server.world.ServerWorld;
 
-@EventBusSubscriber(modid = ConcreteConversion.MODID)
 public class ConcretePowderConverter {
 
 	private static HashMap<ItemEntity, Integer> entities = new HashMap<ItemEntity, Integer>();
 	private static List<ItemEntity> removes = new ArrayList<ItemEntity>();
 
-	@SubscribeEvent
-	public static void itemTossEvent(ItemTossEvent event) {
-		if (isServer(event) && ConfigOptions.onlyPlayerThrownItems.get()
-				&& isConcretePowder(event.getEntityItem().getItem())) {
-			entities.putIfAbsent(event.getEntityItem(), 0);
-		}
-	}
-
-	@SubscribeEvent
-	public static void itemPickedUp(PlayerEvent.ItemPickupEvent event) {
-		if (isServer(event) && entities.containsKey(event.getOriginalEntity())) {
-			removes.add(event.getOriginalEntity());
-		}
-	}
-
-	@SubscribeEvent
-	public static void itemExpired(ItemExpireEvent event) {
-		if (isServer(event) && entities.containsKey(event.getEntityItem())) {
-			removes.add(event.getEntityItem());
-		}
-	}
-
 	private static int lastCheck = 0;
 
-	@SuppressWarnings("resource")
-	@SubscribeEvent
-	public static void itemChecker(TickEvent.ServerTickEvent event) {
-		if (isServer(event)) {
+	public static void itemChecker() {
+
+		ServerTickCallback.EVENT.register((listener) -> {
 			lastCheck++;
-			if ((ConfigOptions.conversionCheckDelay.get() <= lastCheck)) {
+			if ((ConfigOptions.conversionCheckDelay <= lastCheck)) {
 				lastCheck = 0;
-				if (!ConfigOptions.onlyPlayerThrownItems.get()) {
-					try {
-						for (Entity e : Minecraft.getInstance().world.getAllEntities()) {
+				try {
+					for(ServerWorld w : listener.getWorlds()) {
+						for(Entity e : w.getEntities(null, (entity)-> entity instanceof ItemEntity)) {
 							try {
 								entities.putIfAbsent((ItemEntity) e, 0);
 							} catch (Exception localException) {
 							}
 						}
-					} catch (java.lang.NullPointerException e) {
 					}
+				} catch (java.lang.NullPointerException e) {
 				}
 				for (int i = 0; i < entities.size(); i++) {
 					ItemEntity e = (ItemEntity) entities.keySet().toArray()[i];
-					if (e.isInWater()) {
-						if (entities.get(e) >= ConfigOptions.conversionDelay.get()) {
+					if (e.isSubmergedInWater()) {
+						if (entities.get(e) >= ConfigOptions.conversionDelay) {
 							tryConvertEntity(e);
 							removes.add(e);
 						} else {
@@ -89,13 +57,13 @@ public class ConcretePowderConverter {
 				}
 				removes.clear();
 			}
-		}
+		});
 	}
 
 	private static boolean tryConvertEntity(ItemEntity itemEntity) {
-		ItemStack item = itemEntity.getItem();
+		ItemStack item = itemEntity.getStack();
 		if (isConcretePowder(item)) {
-			itemEntity.setItem(tryConvertStack(item));
+			itemEntity.setStack(tryConvertStack(item));
 			return true;
 		}
 		return false;
@@ -157,13 +125,5 @@ public class ConcretePowderConverter {
 
 	private static boolean isConcretePowder(ItemStack stack) {
 		return (Block.getBlockFromItem(stack.getItem()) instanceof ConcretePowderBlock);
-	}
-	
-	private static boolean isServer(EntityEvent event) {
-		return !event.getEntity().getEntityWorld().isRemote();
-	}
-	
-	private static boolean isServer(TickEvent event) {
-		return event.side == LogicalSide.SERVER;
 	}
 }

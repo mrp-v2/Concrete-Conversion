@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>1.15.2 Concrete Conversion</name>
+	<name>Concrete-Conversion-1.14.4-Fabric</name>
 	<comment></comment>
 	<projects/>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments/>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
 			<arguments/>
 		</buildCommand>
 	</buildSpec>

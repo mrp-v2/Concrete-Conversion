@@ -1,53 +1,69 @@
 package com.mrp_v2.concreteconversion.config;
 
-import org.apache.commons.lang3.tuple.Pair;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class ConfigOptions {
 
-	public static BooleanValue onlyPlayerThrownItems;
+	public static int conversionCheckDelay;
 
-	public static IntValue conversionCheckDelay;
+	public static int conversionDelay;
 
-	public static IntValue conversionDelay;
+	public static void init(File fileSrc) {
 
-	public static class Server {
+		conversionCheckDelay = 20;
+		conversionDelay = 0;
 
-		Server(final ForgeConfigSpec.Builder builder) {
-			builder.comment("Server configuration settings").push("server");
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("conversionCheckDelay", conversionCheckDelay);
+		jsonObject.addProperty("conversionDelay", conversionDelay);
 
-			onlyPlayerThrownItems = builder
-					.comment("If true, only items thrown by the player will be converted into concrete."
-							+ "If false, all concrete powder items will be converted,"
-							+ " including items dispensed by droppers,"
-							+ " items that drop when a chest is destroyed, etc.")
-					.translation("mrp_v2.concreteconversion.configgui.onlyPlayerThrownItems")
-					.define("onlyPlayerThrownItems", true);
-
-			conversionCheckDelay = builder
-					.comment("Every this many game ticks,"
-							+ " the mod will check wether the currently tracked concrete powder items are in water,"
-							+ " and if they are, will convert them." + " The default is 20 ticks, or 1 second.")
-					.translation("mrp_v2.concreteconversion.configgui.conversionCheckDelay")
-					.defineInRange("conversionCheckDelay", 20, 1, 200);
-
-			conversionDelay = builder
-					.comment("After this many game ticks spent in water," + " the item will be converted.")
-					.translation("mrp_v2.concreteconversion.configgui.conversionDelay")
-					.defineInRange("conversionDelay", 0, 0, 6000);
-
-			builder.pop();
+		if(!fileSrc.exists() || fileSrc.length() <= 2) {
+			save(fileSrc, jsonObject);
+		} else {
+			JsonParser parser = new JsonParser();
+			try {
+				Object obj = parser.parse(new FileReader(fileSrc));
+				JsonObject jsonObjectRead = (JsonObject) obj;;
+				conversionCheckDelay = jsonObjectRead.get("conversionCheckDelay").getAsInt();
+				conversionDelay = jsonObjectRead.get("conversionDelay").getAsInt();
+				
+				if(conversionCheckDelay < 1) {
+					conversionCheckDelay = 1;
+				}
+				
+				if(conversionCheckDelay > 200) {
+					conversionCheckDelay = 200;
+				}
+				
+				if(conversionDelay < 0) {
+					conversionDelay = 0;
+				}
+				
+				if(conversionDelay > 6000) {
+					conversionDelay = 6000;
+				}
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 		}
-	}
 
-	public static final ForgeConfigSpec serverSpec;
-	public static final Server SERVER;
-	static {
-		final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
-		serverSpec = specPair.getRight();
-		SERVER = specPair.getLeft();
+	}
+	
+	public static void save(File fileSrc, JsonObject object) {
+		try {
+			FileWriter file = new FileWriter(fileSrc);
+			file.write(new GsonBuilder().setPrettyPrinting().create().toJson(object));
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
