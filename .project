@@ -2,16 +2,8 @@
 <projectDescription>
 	<name>ConcreteConversion</name>
 	<comment></comment>
-<<<<<<< HEAD
-	<projects/>
-	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
-	</natures>
-=======
 	<projects>
 	</projects>
->>>>>>> branch 'Forge-1.14.4' of https://github.com/mrp-v2/ConcreteConversion.git
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
@@ -22,10 +14,6 @@
 			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
 			<arguments>
 			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
-			<arguments/>
 		</buildCommand>
 	</buildSpec>
 	<natures>
