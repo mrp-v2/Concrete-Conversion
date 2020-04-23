@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<<<<<<< HEAD
 <mapAttribute key="org.eclipse.debug.core.environmentVariables">
 <mapEntry key="FORGE_GROUP" value="net.minecraftforge"/>
 <mapEntry key="FORGE_VERSION" value="31.1.27"/>
@@ -18,4 +19,23 @@
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ConcreteConversion"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dforge.logging.console.level=debug -Dforge.logging.markers=SCAN,REGISTRIES,REGISTRYDUMP -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump &quot;-Dos.name=Windows 10&quot; -Dos.version=10.0"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="C:\Users\matth\Documents\Making Mods\Mods\1.14.4\ConcreteConversion\run"/>
+=======
+  <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="1.15.2 Concrete Conversion"/>
+  <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="net.minecraftforge.userdev.LaunchTesting"/>
+  <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dforge.logging.console.level=debug -Dforge.logging.markers=SCAN,REGISTRIES,REGISTRYDUMP -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump &quot;-Dos.name=Windows 10&quot; -Dos.version=10.0"/>
+  <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value=""/>
+  <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="C:\Users\matth\Documents\Making Mods\Mods\1.15.2\1.15.2 Concrete Conversion\run"/>
+  <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+    <mapEntry key="MOD_CLASSES" value="examplemod%%C:\Users\matth\Documents\Making Mods\Mods\1.15.2\1.15.2 Concrete Conversion\bin\main;examplemod%%C:\Users\matth\Documents\Making Mods\Mods\1.15.2\1.15.2 Concrete Conversion\bin\main"/>
+    <mapEntry key="MCP_MAPPINGS" value="snapshot_20200225-1.15.1"/>
+    <mapEntry key="MCP_VERSION" value="20200307.202953"/>
+    <mapEntry key="FORGE_VERSION" value="31.1.27"/>
+    <mapEntry key="assetIndex" value="1.15"/>
+    <mapEntry key="assetDirectory" value="C:\Users\matth\.gradle\caches\forge_gradle\assets"/>
+    <mapEntry key="nativesDirectory" value="C:\Users\matth\Documents\Making Mods\Mods\1.15.2\1.15.2 Concrete Conversion\build\natives"/>
+    <mapEntry key="FORGE_GROUP" value="net.minecraftforge"/>
+    <mapEntry key="target" value="fmluserdevclient"/>
+    <mapEntry key="MC_VERSION" value="1.15.2"/>
+  </mapAttribute>
+>>>>>>> branch 'Forge-1.14.4' of https://github.com/mrp-v2/ConcreteConversion.git
 </launchConfiguration>
