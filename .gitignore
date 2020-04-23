@@ -1,9 +1,7 @@
-.git/
-.gradle/
-bin/
-build/
-gradle/
-run/
-gradlew
 *.bat
-*.launch
+/.gradle/
+/bin/
+/build/
+/gradle/
+/gradlew
+/run/
