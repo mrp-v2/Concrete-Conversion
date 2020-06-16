@@ -8,7 +8,6 @@ logoFile="ConcreteConversionLogo.png"
 	updateJSONURL="https://raw.githubusercontent.com/mrp-v2/ModUpdateFiles/master/ConcreteConversion.json"
 	issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/concrete-conversion/issues"
 	displayURL="https://minecraft.curseforge.com/projects/concrete-conversion"
-	credits="Thanks to coolsim for help with porting to 1.14"
 	authors="mrp_v2, coolsim"
 	description='''Adds a new, easy way to convert concrete powder into concrete.'''
 [[dependencies.concreteconversion]]
