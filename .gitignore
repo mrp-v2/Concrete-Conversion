@@ -1,12 +1,23 @@
-.git/
-.gradle/
-bin/
-build/
-gradle/
-run/
-gradlew
-*.bat
+# eclipse
+bin
 *.launch
+.settings
+.metadata
 .classpath
 .project
-/.settings/
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+
+# Files from Forge MDK
+forge*changelog.txt
+
+# other other
+*.bat
+/gradle/
+/gradlew
