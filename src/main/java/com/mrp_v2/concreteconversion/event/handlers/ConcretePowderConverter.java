@@ -53,7 +53,6 @@ public class ConcretePowderConverter {
 
 	private static int lastCheck = 0;
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void itemChecker(TickEvent.ServerTickEvent event) {
 		if (isServer(event)) {
