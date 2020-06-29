@@ -1,7 +1,6 @@
 {
     "pack": {
         "description": "Concrete Conversion resources",
-        "pack_format": 4,
-        "description": ""
+        "pack_format": 5
     }
 }

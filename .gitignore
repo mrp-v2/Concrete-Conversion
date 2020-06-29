@@ -7,3 +7,6 @@ run/
 gradlew
 *.bat
 *.launch
+.classpath
+.project
+/.settings/
