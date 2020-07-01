@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.mrp_v2.concreteconversion.ConcreteConversion;
-import com.mrp_v2.concreteconversion.config.ConfigOptions;
+import com.mrp_v2.concreteconversion.config.ConcreteConversionConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -31,7 +31,7 @@ public class ConcretePowderConverter {
 
 	@SubscribeEvent
 	public static void itemTossEvent(ItemTossEvent event) {
-		if (isServer(event) && ConfigOptions.onlyPlayerThrownItems.get()
+		if (isServer(event) && ConcreteConversionConfig.SERVER.onlyPlayerThrownItems.get()
 				&& isConcretePowder(event.getEntityItem().getItem())) {
 			entities.putIfAbsent(event.getEntityItem(), 0);
 		}
@@ -57,9 +57,9 @@ public class ConcretePowderConverter {
 	public static void itemChecker(TickEvent.ServerTickEvent event) {
 		if (isServer(event)) {
 			lastCheck++;
-			if ((ConfigOptions.conversionCheckDelay.get() <= lastCheck)) {
+			if ((ConcreteConversionConfig.SERVER.conversionCheckDelay.get() <= lastCheck)) {
 				lastCheck = 0;
-				if (!ConfigOptions.onlyPlayerThrownItems.get()) {
+				if (!ConcreteConversionConfig.SERVER.onlyPlayerThrownItems.get()) {
 					try {
 						for (Entity e : Minecraft.getInstance().world.getAllEntities()) {
 							try {
@@ -73,7 +73,7 @@ public class ConcretePowderConverter {
 				for (int i = 0; i < entities.size(); i++) {
 					ItemEntity e = (ItemEntity) entities.keySet().toArray()[i];
 					if (e.isInWater()) {
-						if (entities.get(e) >= ConfigOptions.conversionDelay.get()) {
+						if (entities.get(e) >= ConcreteConversionConfig.SERVER.conversionDelay.get()) {
 							tryConvertEntity(e);
 							removes.add(e);
 						} else {
@@ -157,11 +157,11 @@ public class ConcretePowderConverter {
 	private static boolean isConcretePowder(ItemStack stack) {
 		return (Block.getBlockFromItem(stack.getItem()) instanceof ConcretePowderBlock);
 	}
-	
+
 	private static boolean isServer(EntityEvent event) {
 		return !event.getEntity().getEntityWorld().isRemote();
 	}
-	
+
 	private static boolean isServer(TickEvent event) {
 		return event.side == LogicalSide.SERVER;
 	}
