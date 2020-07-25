@@ -1,6 +1,6 @@
 package com.mrp_v2.concreteconversion;
 
-import com.mrp_v2.concreteconversion.config.ConcreteConversionConfig;
+import com.mrp_v2.concreteconversion.config.Config;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -15,8 +15,8 @@ public class ConcreteConversion {
 	public static final String TRANSLATION_KEY_STEM = "mrp_v2." + MODID + ".";
 
 	public ConcreteConversion() {
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConcreteConversionConfig.serverSpec);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		modEventBus.register(ConcreteConversionConfig.class);
+		modEventBus.register(Config.class);
 	}
 }
