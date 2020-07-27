@@ -3,7 +3,7 @@ loaderVersion="[28,)"
 logoFile="ConcreteConversionLogo.png"
 [[mods]]
 	modId="concreteconversion"
-	version="1.14.4-4.1.0.0"
+	version="${version}"
 	displayName="Concrete Conversion"
 	updateJSONURL="https://raw.githubusercontent.com/mrp-v2/ModUpdateFiles/master/ConcreteConversion.json"
 	issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/concrete-conversion/issues"
