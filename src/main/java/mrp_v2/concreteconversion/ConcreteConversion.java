@@ -1,7 +1,6 @@
-package com.mrp_v2.concreteconversion;
+package mrp_v2.concreteconversion;
 
-import com.mrp_v2.concreteconversion.config.Config;
-
+import mrp_v2.concreteconversion.config.Config;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

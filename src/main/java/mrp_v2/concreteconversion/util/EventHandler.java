@@ -1,13 +1,13 @@
-package com.mrp_v2.concreteconversion.util;
+package mrp_v2.concreteconversion.util;
 
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.mrp_v2.concreteconversion.ConcreteConversion;
-import com.mrp_v2.concreteconversion.config.Config;
 
+import mrp_v2.concreteconversion.ConcreteConversion;
+import mrp_v2.concreteconversion.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ConcretePowderBlock;

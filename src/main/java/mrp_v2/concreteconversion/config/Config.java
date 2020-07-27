@@ -1,10 +1,9 @@
-package com.mrp_v2.concreteconversion.config;
+package mrp_v2.concreteconversion.config;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 
-import com.mrp_v2.concreteconversion.ConcreteConversion;
-
+import mrp_v2.concreteconversion.ConcreteConversion;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
