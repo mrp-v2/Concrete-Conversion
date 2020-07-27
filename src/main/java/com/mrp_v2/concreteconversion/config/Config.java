@@ -58,16 +58,12 @@ public class Config {
 
 	@SubscribeEvent
 	public static void onLoad(final ModConfig.Loading configEvent) {
-		// LogManager.getLogger().debug(FORGEMOD, "Loaded forge config file {}",
-		// configEvent.getConfig().getFileName());
 		LogManager.getLogger().debug("Loaded Concrete Conversion config file {}",
 				configEvent.getConfig().getFileName());
 	}
 
 	@SubscribeEvent
 	public static void onFileChange(final ModConfig.Reloading configEvent) {
-		// LogManager.getLogger().debug(FORGEMOD, "Forge config just got changed on the
-		// file system!");
 		LogManager.getLogger().debug("Concrete Conversion config just got changed on the file system!");
 	}
 }
