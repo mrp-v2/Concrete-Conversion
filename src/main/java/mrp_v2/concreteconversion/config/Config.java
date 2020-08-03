@@ -45,7 +45,7 @@ public class Config {
 		}
 	}
 
-	private static final String TRANSLATION_KEY = ConcreteConversion.TRANSLATION_KEY_STEM + "configgui.";
+	private static final String TRANSLATION_KEY = ConcreteConversion.TRANSLATION_KEY_STEM + "config.gui.";
 
 	public static final ForgeConfigSpec serverSpec;
 	public static final Server SERVER;
