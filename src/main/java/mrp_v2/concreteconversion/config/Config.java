@@ -1,68 +1,73 @@
 package mrp_v2.concreteconversion.config;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-
 import mrp_v2.concreteconversion.ConcreteConversion;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
 
-public class Config {
+public class Config
+{
 
-	public static class Server {
+    public static final ForgeConfigSpec serverSpec;
+    public static final Server SERVER;
+    private static final String TRANSLATION_KEY = ConcreteConversion.TRANSLATION_KEY_STEM + "config.gui.";
 
-		public final BooleanValue onlyPlayerThrownItems;
+    static
+    {
+        final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
+        serverSpec = specPair.getRight();
+        SERVER = specPair.getLeft();
+    }
 
-		public final IntValue conversionCheckDelay;
+    @SubscribeEvent public static void onLoad(final ModConfig.Loading configEvent)
+    {
+        LogManager.getLogger()
+                  .debug("Loaded Concrete Conversion config file {}", configEvent.getConfig().getFileName());
+    }
 
-		public final IntValue conversionDelay;
+    @SubscribeEvent public static void onFileChange(final ModConfig.Reloading configEvent)
+    {
+        LogManager.getLogger().debug("Concrete Conversion config just got changed on the file system!");
+    }
 
-		Server(final ForgeConfigSpec.Builder builder) {
-			builder.comment("Server configuration settings").push("server");
+    public static class Server
+    {
 
-			onlyPlayerThrownItems = builder
-					.comment("If true, only items thrown by the player will be converted into concrete."
-							+ "If false, all concrete powder items will be converted,"
-							+ " including items dispensed by droppers,"
-							+ " items that drop when a chest is destroyed, etc.")
-					.translation(TRANSLATION_KEY + "onlyPlayerThrownItems").define("onlyPlayerThrownItems", true);
+        public final BooleanValue onlyPlayerThrownItems;
 
-			conversionCheckDelay = builder
-					.comment("Every this many game ticks,"
-							+ " the mod will check wether the currently tracked concrete powder items are in water,"
-							+ " and if they are, will convert them." + " The default is 20 ticks, or 1 second.")
-					.translation(TRANSLATION_KEY + "conversionCheckDelay")
-					.defineInRange("conversionCheckDelay", 20, 1, 200);
+        public final IntValue conversionCheckDelay;
 
-			conversionDelay = builder
-					.comment("After this many game ticks spent in water," + " the item will be converted.")
-					.translation(TRANSLATION_KEY + "conversionDelay").defineInRange("conversionDelay", 0, 0, 6000);
+        public final IntValue conversionDelay;
 
-			builder.pop();
-		}
-	}
+        Server(final ForgeConfigSpec.Builder builder)
+        {
+            builder.comment("Server configuration settings").push("server");
 
-	private static final String TRANSLATION_KEY = ConcreteConversion.TRANSLATION_KEY_STEM + "config.gui.";
+            onlyPlayerThrownItems = builder.comment(
+                    "If true, only items thrown by the player will be converted into concrete." +
+                            "\nIf false, all concrete powder items will be converted," +
+                            "including items dispensed by droppers," +
+                            "items that drop when a chest is destroyed, etc.")
+                                           .translation(TRANSLATION_KEY + "onlyPlayerThrownItems")
+                                           .define("onlyPlayerThrownItems", true);
 
-	public static final ForgeConfigSpec serverSpec;
-	public static final Server SERVER;
-	static {
-		final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
-		serverSpec = specPair.getRight();
-		SERVER = specPair.getLeft();
-	}
+            conversionCheckDelay = builder.comment("Every this many game ticks," +
+                    " the mod will check whether the currently tracked concrete powder items are in water," +
+                    " and if they are, will convert them." +
+                    "\nThe default is 20 ticks, or 1 second.")
+                                          .translation(TRANSLATION_KEY + "conversionCheckDelay")
+                                          .defineInRange("conversionCheckDelay", 20, 1, 200);
 
-	@SubscribeEvent
-	public static void onLoad(final ModConfig.Loading configEvent) {
-		LogManager.getLogger().debug("Loaded Concrete Conversion config file {}",
-				configEvent.getConfig().getFileName());
-	}
+            conversionDelay =
+                    builder.comment("After this many game ticks spent in water," + " the item will be converted.")
+                           .translation(TRANSLATION_KEY + "conversionDelay")
+                           .defineInRange("conversionDelay", 0, 0, 6000);
 
-	@SubscribeEvent
-	public static void onFileChange(final ModConfig.Reloading configEvent) {
-		LogManager.getLogger().debug("Concrete Conversion config just got changed on the file system!");
-	}
+            builder.pop();
+        }
+    }
 }

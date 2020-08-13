@@ -1,15 +1,10 @@
 package mrp_v2.concreteconversion.util;
 
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 import mrp_v2.concreteconversion.ConcreteConversion;
 import mrp_v2.concreteconversion.config.Config;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ConcretePowderBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -17,141 +12,119 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-@EventBusSubscriber(modid = ConcreteConversion.MODID)
-public class EventHandler {
+import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.Map;
 
-	private static Map<ItemEntity, Integer> entities = Maps.newHashMap();
+@EventBusSubscriber(modid = ConcreteConversion.ID) public class EventHandler
+{
 
-	@SubscribeEvent
-	public static void itemTossEvent(ItemTossEvent event) {
-		if (isServer(event)) {
-			addPlayerThrownItemEntity(event.getEntityItem());
-		}
-	}
+    private static final Map<ItemEntity, Integer> entities = Maps.newHashMap();
+    private static final Field solidifiedStateField;
+    private static int lastCheck = 0;
 
-	private static void addPlayerThrownItemEntity(ItemEntity itemEntity) {
-		if (Config.SERVER.onlyPlayerThrownItems.get() && isConcretePowder(itemEntity)) {
-			entities.putIfAbsent(itemEntity, 0);
-		}
-	}
+    static
+    {
+        Field foundField = null;
+        for (Field field : net.minecraft.block.ConcretePowderBlock.class.getDeclaredFields())
+        {
+            if (field.getType() == BlockState.class)
+            {
+                foundField = field;
+                foundField.setAccessible(true);
+                break;
+            }
+        }
+        solidifiedStateField = foundField;
+    }
 
-	private static int lastCheck = 0;
+    @SubscribeEvent public static void itemTossEvent(ItemTossEvent event)
+    {
+        if (!event.getEntity().getEntityWorld().isRemote())
+        {
+            addPlayerThrownItemEntity(event.getEntityItem());
+        }
+    }
 
-	@SubscribeEvent
-	public static void worldTickEvent(TickEvent.WorldTickEvent event) {
-		if (isServer(event) && event.world instanceof ServerWorld) {
-			itemEntityCheck((ServerWorld) event.world);
-		}
-	}
+    private static void addPlayerThrownItemEntity(ItemEntity itemEntity)
+    {
+        if (Config.SERVER.onlyPlayerThrownItems.get() && isConcretePowder(itemEntity))
+        {
+            entities.putIfAbsent(itemEntity, 0);
+        }
+    }
 
-	private static void itemEntityCheck(ServerWorld world) {
-		lastCheck++;
-		if ((Config.SERVER.conversionCheckDelay.get() <= lastCheck)) {
-			lastCheck = 0;
-			if (!Config.SERVER.onlyPlayerThrownItems.get()) {
-				for (Entity itemEntity : world.getEntities(EntityType.ITEM, (entity) -> true)) {
-					entities.putIfAbsent((ItemEntity) itemEntity, 0);
-				}
-			}
-			Set<ItemEntity> removes = Sets.newHashSet();
-			for (ItemEntity itemEntity : entities.keySet()) {
-				if (!itemEntity.isAlive()) {
-					removes.add(itemEntity);
-					continue;
-				}
-				if (itemEntity.isInWater()) {
-					if (entities.get(itemEntity) >= Config.SERVER.conversionDelay.get()) {
-						convertEntity(itemEntity);
-						removes.add(itemEntity);
-					} else {
-						entities.replace(itemEntity, entities.get(itemEntity) + 1);
-					}
-				} else {
-					entities.replace(itemEntity, 0);
-				}
-			}
-			for (ItemEntity e : removes) {
-				entities.remove(e);
-			}
-			removes.clear();
-		}
-	}
+    private static boolean isConcretePowder(ItemEntity itemEntity)
+    {
+        return (Block.getBlockFromItem(itemEntity.getItem().getItem()) instanceof ConcretePowderBlock);
+    }
 
-	private static void convertEntity(ItemEntity itemEntity) {
-		itemEntity.setItem(tryConvertStack(itemEntity.getItem()));
-	}
+    @SubscribeEvent public static void worldTickEvent(TickEvent.WorldTickEvent event) throws IllegalAccessException
+    {
+        itemEntityCheck((ServerWorld) event.world);
+    }
 
-	private static ItemStack tryConvertStack(ItemStack stack) {
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.BLACK_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.BLACK_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.BLUE_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.BLUE_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.BROWN_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.BROWN_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.CYAN_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.CYAN_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.GRAY_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.GRAY_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.GREEN_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.GREEN_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.LIGHT_BLUE_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.LIGHT_BLUE_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.LIGHT_GRAY_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.LIGHT_GRAY_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.LIME_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.LIME_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.MAGENTA_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.MAGENTA_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.ORANGE_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.ORANGE_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.PINK_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.PINK_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.PURPLE_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.PURPLE_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.RED_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.RED_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.WHITE_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.WHITE_CONCRETE, stack.getCount());
-		}
-		if (Block.getBlockFromItem(stack.getItem()) == Blocks.YELLOW_CONCRETE_POWDER) {
-			stack = new ItemStack(Blocks.YELLOW_CONCRETE, stack.getCount());
-		}
-		return stack;
-	}
+    private static void itemEntityCheck(ServerWorld world) throws IllegalAccessException
+    {
+        if ((Config.SERVER.conversionCheckDelay.get() <= ++lastCheck))
+        {
+            lastCheck = 0;
+            if (!Config.SERVER.onlyPlayerThrownItems.get())
+            {
+                for (Entity itemEntity : world.getEntities(EntityType.ITEM, (entity) -> true))
+                {
+                    entities.putIfAbsent((ItemEntity) itemEntity, 0);
+                }
+            }
+            Iterator<ItemEntity> iterator = entities.keySet().iterator();
+            while (iterator.hasNext())
+            {
+                ItemEntity itemEntity = iterator.next();
+                if (!itemEntity.isAlive())
+                {
+                    iterator.remove();
+                    continue;
+                }
+                if (itemEntity.isInWater())
+                {
+                    if (entities.get(itemEntity) >= Config.SERVER.conversionDelay.get())
+                    {
+                        convertEntity(itemEntity);
+                        iterator.remove();
+                    } else
+                    {
+                        entities.replace(itemEntity, entities.get(itemEntity) + 1);
+                    }
+                } else
+                {
+                    entities.replace(itemEntity, 0);
+                }
+            }
+        }
+    }
 
-	private static boolean isConcretePowder(ItemEntity itemEntity) {
-		return isConcretePowder(itemEntity.getItem());
-	}
+    private static void convertEntity(ItemEntity itemEntity) throws IllegalAccessException
+    {
+        ItemStack stack = itemEntity.getItem();
+        Block block = getPowderConverted(Block.getBlockFromItem(stack.getItem()));
+        if (block != null)
+        {
+            itemEntity.setItem(new ItemStack(block, stack.getCount()));
+        }
+    }
 
-	private static boolean isConcretePowder(ItemStack stack) {
-		return (Block.getBlockFromItem(stack.getItem()) instanceof ConcretePowderBlock);
-	}
-
-	private static boolean isServer(EntityEvent event) {
-		return !event.getEntity().getEntityWorld().isRemote();
-	}
-
-	private static boolean isServer(TickEvent event) {
-		return event.side == LogicalSide.SERVER;
-	}
+    private static Block getPowderConverted(Block block) throws IllegalAccessException
+    {
+        ConcretePowderBlock concretePowderBlock =
+                block instanceof ConcretePowderBlock ? (ConcretePowderBlock) block : null;
+        if (concretePowderBlock == null)
+        {
+            return null;
+        }
+        return ((BlockState) solidifiedStateField.get(concretePowderBlock)).getBlock();
+    }
 }
