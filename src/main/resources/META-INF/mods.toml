@@ -4,12 +4,12 @@ logoFile="ConcreteConversionLogo.png"
 [[mods]]
 	modId="concreteconversion"
 	version="${version}"
-	displayName="Concrete Conversion"
+	displayName="Concrete Conversion DVCCM"
 	updateJSONURL="https://raw.githubusercontent.com/mrp-v2/ModUpdateFiles/master/ConcreteConversion.json"
 	issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/concrete-conversion/issues"
 	displayURL="https://minecraft.curseforge.com/projects/concrete-conversion"
 	authors="mrp_v2, coolsim"
-	description='''Adds a new, easy way to convert concrete powder into concrete.'''
+	description='''Adds a new, easy way to convert concrete powder into concrete. DVCCM: Also disables the vanilla concrete conversion mechanic'''
 [[dependencies.concreteconversion]]
     modId="forge"
     mandatory=true
