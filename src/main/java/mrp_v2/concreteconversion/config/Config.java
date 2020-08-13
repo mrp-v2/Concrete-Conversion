@@ -11,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 
 public class Config
 {
-
     public static final ForgeConfigSpec serverSpec;
     public static final Server SERVER;
     private static final String TRANSLATION_KEY = ConcreteConversion.TRANSLATION_KEY_STEM + "config.gui.";
@@ -36,7 +35,6 @@ public class Config
 
     public static class Server
     {
-
         public final BooleanValue onlyPlayerThrownItems;
 
         public final IntValue conversionCheckDelay;

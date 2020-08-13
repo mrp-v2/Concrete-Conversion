@@ -7,15 +7,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(value = ConcreteConversion.ID)
-public class ConcreteConversion {
+@Mod(value = ConcreteConversion.ID) public class ConcreteConversion
+{
+    public static final String ID = "concreteconversion";
+    public static final String TRANSLATION_KEY_STEM = ID + ".";
 
-	public static final String ID = "concreteconversion";
-	public static final String TRANSLATION_KEY_STEM = ID + ".";
-
-	public ConcreteConversion() {
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
-		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		modEventBus.register(Config.class);
-	}
+    public ConcreteConversion()
+    {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.register(Config.class);
+    }
 }

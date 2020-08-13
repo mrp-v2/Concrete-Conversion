@@ -22,7 +22,6 @@ import java.util.Map;
 
 @EventBusSubscriber(modid = ConcreteConversion.ID) public class EventHandler
 {
-
     private static final Map<ItemEntity, Integer> entities = Maps.newHashMap();
     private static final Field solidifiedStateField;
     private static int lastCheck = 0;
