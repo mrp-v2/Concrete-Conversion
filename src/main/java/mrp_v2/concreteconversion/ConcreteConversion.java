@@ -10,7 +10,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(value = ConcreteConversion.ID) public class ConcreteConversion
 {
     public static final String ID = "concreteconversion";
-    public static final String TRANSLATION_KEY_STEM = ID + ".";
 
     public ConcreteConversion()
     {

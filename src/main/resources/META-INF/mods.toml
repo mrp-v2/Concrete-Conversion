@@ -1,24 +1,25 @@
 modLoader="javafml"
-loaderVersion="[32,)"
-logoFile="ConcreteConversionLogo.png"
+loaderVersion="[${forgeMajor},)"
+license="All rights reserved"
 [[mods]]
-	modId="concreteconversion"
+	modId="${modId}"
 	version="${version}"
-	displayName="Concrete Conversion"
-	updateJSONURL="https://raw.githubusercontent.com/mrp-v2/ModUpdateFiles/master/ConcreteConversion.json"
-	issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/concrete-conversion/issues"
-	displayURL="https://minecraft.curseforge.com/projects/concrete-conversion"
-	authors="mrp_v2, coolsim"
-	description='''Adds a new, easy way to convert concrete powder into concrete.'''
-[[dependencies.concreteconversion]]
+	displayName="${modDisplayName}"
+	logoFile="${logo}"
+	updateJSONURL="${updateURL}"
+	issueTrackerURL="${issuesURL}"
+	displayURL="${homepageURL}"
+	authors="${author}"
+	description='''${modDescription}'''
+[[dependencies.${modId}]]
     modId="forge"
     mandatory=true
-    versionRange="[32,)"
+    versionRange="[${forgeMajor},)"
     ordering="NONE"
-    side="SERVER"
-[[dependencies.concreteconversion]]
+    side="BOTH"
+[[dependencies.${modId}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1]"
+    versionRange="[${mcVersion}]"
     ordering="NONE"
     side="BOTH"
