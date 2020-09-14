@@ -13,7 +13,7 @@ public class Config
 {
     public static final ForgeConfigSpec serverSpec;
     public static final Server SERVER;
-    private static final String TRANSLATION_KEY = ConcreteConversion.TRANSLATION_KEY_STEM + "config.gui.";
+    private static final String TRANSLATION_KEY = ConcreteConversion.ID + ".config.gui.";
 
     static
     {
@@ -25,7 +25,7 @@ public class Config
     @SubscribeEvent public static void onLoad(final ModConfig.Loading configEvent)
     {
         LogManager.getLogger()
-                  .debug("Loaded Concrete Conversion config file {}", configEvent.getConfig().getFileName());
+                .debug("Loaded Concrete Conversion config file {}", configEvent.getConfig().getFileName());
     }
 
     @SubscribeEvent public static void onFileChange(final ModConfig.Reloading configEvent)
@@ -36,35 +36,28 @@ public class Config
     public static class Server
     {
         public final BooleanValue onlyPlayerThrownItems;
-
         public final IntValue conversionCheckDelay;
-
         public final IntValue conversionDelay;
 
         Server(final ForgeConfigSpec.Builder builder)
         {
-            builder.comment("Server configuration settings").push("server");
-
-            onlyPlayerThrownItems = builder.comment(
-                    "If true, only items thrown by the player will be converted into concrete." +
-                            "\nIf false, all concrete powder items will be converted," +
-                            "including items dispensed by droppers," +
-                            "items that drop when a chest is destroyed, etc.")
-                                           .translation(TRANSLATION_KEY + "onlyPlayerThrownItems")
-                                           .define("onlyPlayerThrownItems", true);
-
-            conversionCheckDelay = builder.comment("Every this many game ticks," +
-                    " the mod will check whether the currently tracked concrete powder items are in water," +
-                    " and if they are, will convert them." +
-                    "\nThe default is 20 ticks, or 1 second.")
-                                          .translation(TRANSLATION_KEY + "conversionCheckDelay")
-                                          .defineInRange("conversionCheckDelay", 20, 1, 200);
-
+            builder.comment(" Server configuration settings").push("server");
+            onlyPlayerThrownItems =
+                    builder.comment(" If true, only items thrown by the player will be converted into concrete.",
+                            " If false, all concrete powder items will be converted,",
+                            " including items dispensed by droppers,",
+                            " items that drop when a chest is destroyed, etc.")
+                            .translation(TRANSLATION_KEY + "onlyPlayerThrownItems")
+                            .define("onlyPlayerThrownItems", true);
+            conversionCheckDelay = builder.comment(" Every this many game ticks,",
+                    " the mod will check whether the currently tracked concrete powder items are in water,",
+                    " and if they are, will convert them.", " The default is 20 ticks, or 1 second.")
+                    .translation(TRANSLATION_KEY + "conversionCheckDelay")
+                    .defineInRange("conversionCheckDelay", 20, 1, 200);
             conversionDelay =
-                    builder.comment("After this many game ticks spent in water," + " the item will be converted.")
-                           .translation(TRANSLATION_KEY + "conversionDelay")
-                           .defineInRange("conversionDelay", 0, 0, 6000);
-
+                    builder.comment(" After this many game ticks spent in water,", " the item will be converted.")
+                            .translation(TRANSLATION_KEY + "conversionDelay")
+                            .defineInRange("conversionDelay", 0, 0, 6000);
             builder.pop();
         }
     }

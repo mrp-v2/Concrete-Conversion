@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "Concrete Conversion resources",
+        "description": "${modDisplayName} resources",
         "pack_format": 5
     }
 }
