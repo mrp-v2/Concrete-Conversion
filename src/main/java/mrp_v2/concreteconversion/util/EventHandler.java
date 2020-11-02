@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import mrp_v2.concreteconversion.ConcreteConversion;
 import mrp_v2.concreteconversion.config.Config;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.ConcretePowderBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -16,30 +15,13 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
 
 @EventBusSubscriber(modid = ConcreteConversion.ID) public class EventHandler
 {
     private static final Map<ItemEntity, Integer> entities = Maps.newHashMap();
-    private static final Field solidifiedStateField;
     private static int lastCheck = 0;
-
-    static
-    {
-        Field foundField = null;
-        for (Field field : net.minecraft.block.ConcretePowderBlock.class.getDeclaredFields())
-        {
-            if (field.getType() == BlockState.class)
-            {
-                foundField = field;
-                foundField.setAccessible(true);
-                break;
-            }
-        }
-        solidifiedStateField = foundField;
-    }
 
     @SubscribeEvent public static void itemTossEvent(ItemTossEvent event)
     {
@@ -62,12 +44,12 @@ import java.util.Map;
         return (Block.getBlockFromItem(itemEntity.getItem().getItem()) instanceof ConcretePowderBlock);
     }
 
-    @SubscribeEvent public static void worldTickEvent(TickEvent.WorldTickEvent event) throws IllegalAccessException
+    @SubscribeEvent public static void worldTickEvent(TickEvent.WorldTickEvent event)
     {
         itemEntityCheck((ServerWorld) event.world);
     }
 
-    private static void itemEntityCheck(ServerWorld world) throws IllegalAccessException
+    private static void itemEntityCheck(ServerWorld world)
     {
         if ((Config.SERVER.conversionCheckDelay.get() <= ++lastCheck))
         {
@@ -106,7 +88,7 @@ import java.util.Map;
         }
     }
 
-    private static void convertEntity(ItemEntity itemEntity) throws IllegalAccessException
+    private static void convertEntity(ItemEntity itemEntity)
     {
         ItemStack stack = itemEntity.getItem();
         Block block = getPowderConverted(Block.getBlockFromItem(stack.getItem()));
@@ -116,7 +98,7 @@ import java.util.Map;
         }
     }
 
-    private static Block getPowderConverted(Block block) throws IllegalAccessException
+    private static Block getPowderConverted(Block block)
     {
         ConcretePowderBlock concretePowderBlock =
                 block instanceof ConcretePowderBlock ? (ConcretePowderBlock) block : null;
@@ -124,6 +106,6 @@ import java.util.Map;
         {
             return null;
         }
-        return ((BlockState) solidifiedStateField.get(concretePowderBlock)).getBlock();
+        return concretePowderBlock.solidifiedState.getBlock();
     }
 }
