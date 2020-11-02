@@ -18,7 +18,7 @@ def forgeVersion = "${forgeMajor}.${forgeMinor}.${forgePatch}"
 def homepageURL = "https://www.curseforge.com/minecraft/mc-mods/${modDisplayName.replace(' ', '-').toLowerCase()}"
 def issuesURL = "${homepageURL}/issues"
 def updateURL = "https://raw.githubusercontent.com/mrp-v2/${capitalizedModId}/no-vanilla-mechanic/update.json"
-version = "${mcVersion}-${modMajorMod}.${modMajorAPI}.${modMinor}.${modPatch}"
+version = "${mcVersion}-${modMajorMod}.${modMajorAPI}.${modMinor}.${modPatch}-dvccm"
 archivesBaseName = modId
 group = "${author}.${archivesBaseName}"
 
