@@ -7,9 +7,13 @@ buildscript {
         }
         jcenter()
         mavenCentral()
+        maven {
+            url = 'https://dist.creeper.host/Sponge/maven'
+        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -41,6 +45,7 @@ minecraft {
     mappings channel: mapping.split('\\|')[0], version: mapping.split('\\|')[1]
     runs {
         client {
+            property 'mixin.env.disableRefMap', 'true'
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
@@ -51,6 +56,7 @@ minecraft {
             }
         }
         server {
+            property 'mixin.env.disableRefMap', 'true'
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
@@ -105,4 +111,8 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude '**/*'
     }
+}
+
+mixin {
+    add sourceSets.main, "${modId}.refmap.json"
 }
