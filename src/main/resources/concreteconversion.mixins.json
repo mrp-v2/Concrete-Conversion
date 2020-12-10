@@ -2,7 +2,6 @@
     "required": true,
     "package": "mrp_v2.concreteconversion.mixin",
     "compatibilityLevel": "JAVA_8",
-    "refmap": "concreteconversion.refmap.json",
     "mixins": [
         "ConcretePowderBlockMixin", "FallingBlockEntityMixin"
     ],
