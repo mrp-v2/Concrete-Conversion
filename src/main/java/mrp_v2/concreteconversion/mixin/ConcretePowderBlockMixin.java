@@ -1,5 +1,6 @@
 package mrp_v2.concreteconversion.mixin;
 
+import mrp_v2.concreteconversion.server.Config;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ConcretePowderBlock;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
     @Inject(at = @At("HEAD"), method = "causesSolidify", cancellable = true)
     private static void causesSolidify(BlockState state, CallbackInfoReturnable<Boolean> cir)
     {
-        cir.setReturnValue(false);
-        cir.cancel();
+        if (Config.SERVER.getDisableVanillaConversionMechanic())
+        {
+            cir.setReturnValue(false);
+            cir.cancel();
+        }
     }
 }

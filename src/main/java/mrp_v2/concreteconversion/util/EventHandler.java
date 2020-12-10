@@ -2,7 +2,7 @@ package mrp_v2.concreteconversion.util;
 
 import com.google.common.collect.Maps;
 import mrp_v2.concreteconversion.ConcreteConversion;
-import mrp_v2.concreteconversion.config.Config;
+import mrp_v2.concreteconversion.server.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.ConcretePowderBlock;
 import net.minecraft.entity.Entity;
@@ -33,7 +33,7 @@ import java.util.Map;
 
     private static void addPlayerThrownItemEntity(ItemEntity itemEntity)
     {
-        if (Config.SERVER.onlyPlayerThrownItems.get() && isConcretePowder(itemEntity))
+        if (Config.SERVER.getOnlyPlayerThrownItems() && isConcretePowder(itemEntity))
         {
             entities.putIfAbsent(itemEntity, 0);
         }
@@ -51,10 +51,10 @@ import java.util.Map;
 
     private static void itemEntityCheck(ServerWorld world)
     {
-        if ((Config.SERVER.conversionCheckDelay.get() <= ++lastCheck))
+        if ((Config.SERVER.getConversionCheckDelay() <= ++lastCheck))
         {
             lastCheck = 0;
-            if (!Config.SERVER.onlyPlayerThrownItems.get())
+            if (!Config.SERVER.getOnlyPlayerThrownItems())
             {
                 for (Entity itemEntity : world.getEntities(EntityType.ITEM, (entity) -> true))
                 {
@@ -72,7 +72,7 @@ import java.util.Map;
                 }
                 if (itemEntity.isInWater())
                 {
-                    if (entities.get(itemEntity) >= Config.SERVER.conversionDelay.get())
+                    if (entities.get(itemEntity) >= Config.SERVER.getConversionDelay())
                     {
                         convertEntity(itemEntity);
                         iterator.remove();
