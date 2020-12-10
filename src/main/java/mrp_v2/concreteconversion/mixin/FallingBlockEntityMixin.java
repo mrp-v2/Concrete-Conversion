@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(FallingBlockEntity.class) public class FallingBlockEntityMixin
 {
-    @ModifyVariable(at = @At("HEAD"), method = "tick", name = "flag") private boolean tick(boolean flag)
+    @ModifyVariable(at = @At(value = "STORE", ordinal = 0), method = "tick") private boolean tick(boolean flag)
     {
         return false;
     }
