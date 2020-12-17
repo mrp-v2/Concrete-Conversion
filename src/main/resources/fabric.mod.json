@@ -11,21 +11,25 @@
   ],
   "contact": {
     "homepage": "https://minecraft.curseforge.com/projects/concrete-conversion",
-    "issues": "https://www.curseforge.com/minecraft/mc-mods/concrete-conversion/issues"
+    "issues": "https://github.com/mrp-v2/ConcreteConversion/issues"
   },
 
-  "license": "Unlicense",
+  "license": "All Rights Reserved",
   "icon": "assets/concreteconversion/ConcreteConversionLogo.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.mrp_v2.concreteconversion.ConcreteConversion"
+      "mrp_v2.concreteconversion.ConcreteConversion"
     ]
   },
-
+  
+  "mixins": [
+    "concreteconversion.mixins.json"
+    ],
+    
   "depends": {
-    "fabricloader": ">=0.4.0",
+    "fabricloader": ">=0.10.8",
     "fabric": "*"
   }
 }

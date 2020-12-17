@@ -1,4 +1,4 @@
-package com.mrp_v2.concreteconversion.config;
+package mrp_v2.concreteconversion.server;
 
 import java.io.File;
 import java.io.FileReader;
@@ -9,20 +9,24 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class ConfigOptions {
+public class Config {
 
 	public static int conversionCheckDelay;
 
 	public static int conversionDelay;
+	
+	public static boolean disableVanillaConversionMechanic;
 
 	public static void init(File fileSrc) {
 
 		conversionCheckDelay = 20;
 		conversionDelay = 0;
+		disableVanillaConversionMechanic = false;
 
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("conversionCheckDelay", conversionCheckDelay);
 		jsonObject.addProperty("conversionDelay", conversionDelay);
+		jsonObject.addProperty("disableVanillaConversionMechanic", disableVanillaConversionMechanic);
 
 		if(!fileSrc.exists() || fileSrc.length() <= 2) {
 			save(fileSrc, jsonObject);
@@ -33,6 +37,7 @@ public class ConfigOptions {
 				JsonObject jsonObjectRead = (JsonObject) obj;;
 				conversionCheckDelay = jsonObjectRead.get("conversionCheckDelay").getAsInt();
 				conversionDelay = jsonObjectRead.get("conversionDelay").getAsInt();
+				disableVanillaConversionMechanic = jsonObjectRead.get("disableVanillaConversionMechanic").getAsBoolean();
 				
 				if(conversionCheckDelay < 1) {
 					conversionCheckDelay = 1;
