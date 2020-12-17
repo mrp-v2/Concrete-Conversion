@@ -21,6 +21,7 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven-publish'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 String mcVersion = version.split('-')[0]
 if (forgeVersion == 'latest' || forgeVersion == 'recommended')
@@ -76,6 +77,25 @@ minecraft {
     }
 }
 
+publishing {
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri('https://maven.pkg.github.com/mrp-v2/' + capitalizedModId)
+            credentials {
+                username = 'mrp-v2'
+                password = System.getenv('GITHUB_TOKEN')
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            artifactId modId
+            artifact jar
+        }
+    }
+}
+
 task regenerateUpdateJson {
     doLast {
         String updateJsonLocation = './update.json'
@@ -84,12 +104,16 @@ task regenerateUpdateJson {
         newUpdateJson.addProperty('homepage', homepageURL)
         JsonObject promos = new JsonObject()
         newUpdateJson.add('promos', promos)
-        JsonObject oldUpdateJson = new JsonParser().
-                parse(new File(updateJsonLocation).text).getAsJsonObject().
-                getAsJsonObject('promos')
-        for (Map.Entry<String, JsonElement> entry : oldUpdateJson.entrySet())
+        File oldUpdateJsonFile = new File(updateJsonLocation)
+        if (oldUpdateJsonFile.exists())
         {
-            promos.addProperty(entry.key, entry.value.asString)
+            JsonObject oldUpdateJson = new JsonParser().
+                    parse(new File(updateJsonLocation).text).getAsJsonObject().
+                    getAsJsonObject('promos')
+            for (Map.Entry<String, JsonElement> entry : oldUpdateJson.entrySet())
+            {
+                promos.addProperty(entry.key, entry.value.asString)
+            }
         }
         promos.addProperty("${mcVersion}-recommended", (String) version)
         promos.addProperty("${mcVersion}-latest", (String) version)
@@ -135,16 +159,18 @@ processResources {
     inputs.property 'author', author
     inputs.property 'updateURL', updateURL
     inputs.property 'issuesURL', issuesURL
+    String[] files = new String[2]
+    files[0] = 'META-INF/mods.toml'
+    files[1] = 'pack.mcmeta'
     from(sourceSets.main.resources.srcDirs) {
-        include '**/*'
-        exclude '**/*.png'
+        include files
         expand 'version': project.version, 'modId': modId, 'forgeMajor': forgeMajor, 'mcVersion': mcVersion,
                 'mcNextVersion': mcNextVersion, 'homepageURL': homepageURL, 'modDisplayName': modDisplayName,
                 'capitalizedModId': capitalizedModId, 'modDescription': modDescription, 'author': author,
                 'updateURL': updateURL, 'issuesURL': issuesURL
     }
     from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*'
+        exclude files
     }
 }
 
