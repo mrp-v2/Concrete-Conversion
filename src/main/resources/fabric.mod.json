@@ -21,6 +21,9 @@
   "entrypoints": {
     "main": [
       "mrp_v2.concreteconversion.ConcreteConversion"
+    ],
+    "modmenu": [
+      "mrp_v2.concreteconversion.util.ConcreteConversionModMenu"
     ]
   },
   
@@ -29,7 +32,20 @@
     ],
     
   "depends": {
-    "fabricloader": ">=0.10.8",
+    "fabricloader": ">=0.12.5",
     "fabric": "*"
+  },
+  
+  "custom": {
+    "modupdater": {
+      "strategy": "curseforge",
+      "projectID": 297318
+    },
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/7DDsHfQ",
+        "modmenu.guilded": "https://guilded.gg/i/Wkn138B2"
+      }
+    }
   }
 }

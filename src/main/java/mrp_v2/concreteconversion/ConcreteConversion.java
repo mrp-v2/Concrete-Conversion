@@ -14,7 +14,7 @@ public class ConcreteConversion implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		Config.init(new File(FabricLoader.getInstance().getConfigDirectory(), MODID + ".json"));
+		Config.init(new File(FabricLoader.getInstance().getConfigDir().toFile(), MODID + ".json"));
 		EventHandler.itemChecker();
 	}
 }

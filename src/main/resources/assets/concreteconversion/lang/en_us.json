@@ -1,5 +1,14 @@
 {
+    "modmenu.guilded": "Guilded",
+    
+    "concreteconversion.config.gui.title": "Concrete Conversion Config",
+    "concreteconversion.config.gui.common": "Common",
     "concreteconversion.config.gui.onlyPlayerThrownItems": "Only Player Thrown Items",
+    "concreteconversion.config.gui.onlyPlayerThrownItems.tooltip": "If true, only items thrown by the player will be converted into concrete. If false, all concrete powder items will be converted, including items dispensed by droppers, items that drop when a chest is destroyed, etc.",
     "concreteconversion.config.gui.conversionCheckDelay": "Conversion Check Delay",
-    "concreteconversion.config.gui.conversionDelay": "Conversion Delay"
+    "concreteconversion.config.gui.conversionCheckDelay.tooltip": "Every this many game ticks, the mod will check whether the currently tracked concrete powder items are in water, and if they are, will convert them.",
+    "concreteconversion.config.gui.conversionDelay": "Conversion Delay",
+    "concreteconversion.config.gui.conversionDelay.tooltip": "After this many game ticks spent in water, the item will be converted.",
+    "concreteconversion.config.gui.disableVanillaConversionMechanic": "Disable Vanilla Conversion Mechanic",
+    "concreteconversion.config.gui.disableVanillaConversionMechanic.tooltip": "Whether to disable to vanilla concrete conversion mechanic. If this is true, concrete powder in block form will not solidify upon contact with water. The only way to convert concrete powder to concrete would be to throw concrete powder items into water."
 }
