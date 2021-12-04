@@ -1,10 +1,11 @@
 package mrp_v2.concreteconversion.mixin;
 
-import mrp_v2.concreteconversion.server.Config;
-import net.minecraft.entity.item.FallingBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
+import mrp_v2.concreteconversion.server.Config;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 
 @Mixin(FallingBlockEntity.class) public class FallingBlockEntityMixin
 {

@@ -7,21 +7,22 @@ import groovy.json.JsonSlurper
 buildscript {
     repositories {
         maven {
-            url = 'https://files.minecraftforge.net/maven'
+            url = 'https://maven.minecraftforge.net'
         }
         jcenter()
         mavenCentral()
         maven {
-            url = 'https://dist.creeper.host/Sponge/maven'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
+apply plugin: 'eclipse'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 String mcVersion = version.split('-')[0]
 if (forgeVersion == 'latest' || forgeVersion == 'recommended')
@@ -129,6 +130,8 @@ task regenerateUpdateJson {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mcVersion}-${forgeVersion}"
+
+    processResources.setDuplicatesStrategy(DuplicatesStrategy.WARN)
 }
 
 jar {
@@ -156,7 +159,7 @@ processResources {
     inputs.property 'modDisplayName', modDisplayName
     inputs.property 'capitalizedModId', capitalizedModId
     inputs.property 'modDescription', modDescription
-    inputs.property 'author', author
+    inputs.property 'author', authors
     inputs.property 'updateURL', updateURL
     inputs.property 'issuesURL', issuesURL
     String[] files = new String[2]
@@ -166,7 +169,7 @@ processResources {
         include files
         expand 'version': project.version, 'modId': modId, 'forgeMajor': forgeMajor, 'mcVersion': mcVersion,
                 'mcNextVersion': mcNextVersion, 'homepageURL': homepageURL, 'modDisplayName': modDisplayName,
-                'capitalizedModId': capitalizedModId, 'modDescription': modDescription, 'author': author,
+                'capitalizedModId': capitalizedModId, 'modDescription': modDescription, 'author': authors,
                 'updateURL': updateURL, 'issuesURL': issuesURL
     }
     from(sourceSets.main.resources.srcDirs) {
@@ -174,8 +177,8 @@ processResources {
     }
 }
 
-apply plugin: 'org.spongepowered.mixin'
+/*apply plugin: 'org.spongepowered.mixin'
 
 mixin {
     add sourceSets.main, "${modId}.refmap.json"
-}
+}*/

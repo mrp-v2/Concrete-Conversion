@@ -1,0 +1,20 @@
+{
+  "mappings": {
+    "mrp_v2/concreteconversion/mixin/ConcretePowderBlockMixin": {
+      "canSolidify": "Lnet/minecraft/world/level/block/ConcretePowderBlock;m_52088_(Lnet/minecraft/world/level/block/state/BlockState;)Z"
+    },
+    "mrp_v2/concreteconversion/mixin/FallingBlockEntityMixin": {
+      "tick": "Lnet/minecraft/world/entity/item/FallingBlockEntity;m_8119_()V"
+    }
+  },
+  "data": {
+    "searge": {
+      "mrp_v2/concreteconversion/mixin/ConcretePowderBlockMixin": {
+        "canSolidify": "Lnet/minecraft/world/level/block/ConcretePowderBlock;m_52088_(Lnet/minecraft/world/level/block/state/BlockState;)Z"
+      },
+      "mrp_v2/concreteconversion/mixin/FallingBlockEntityMixin": {
+        "tick": "Lnet/minecraft/world/entity/item/FallingBlockEntity;m_8119_()V"
+      }
+    }
+  }
+}

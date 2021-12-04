@@ -1,6 +1,11 @@
 # idea
 /.idea/
 
+# eclipse
+/.settings/
+.classpath
+.project
+
 # gradle
 /build/
 /.gradle/
@@ -8,3 +13,6 @@
 # other
 /run/
 /logs/
+
+#O S generated files
+*.DS_Store

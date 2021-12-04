@@ -1,22 +1,23 @@
 package mrp_v2.concreteconversion.util;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import com.google.common.collect.Maps;
+
 import mrp_v2.concreteconversion.ConcreteConversion;
 import mrp_v2.concreteconversion.server.Config;
-import net.minecraft.block.Block;
-import net.minecraft.block.ConcretePowderBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ConcretePowderBlock;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-
-import java.util.Iterator;
-import java.util.Map;
 
 @EventBusSubscriber(modid = ConcreteConversion.ID) public class EventHandler
 {
@@ -25,7 +26,7 @@ import java.util.Map;
 
     @SubscribeEvent public static void itemTossEvent(ItemTossEvent event)
     {
-        if (!event.getEntity().getEntityWorld().isRemote())
+        if (!event.getEntity().getCommandSenderWorld().isClientSide())
         {
             addPlayerThrownItemEntity(event.getEntityItem());
         }
@@ -41,15 +42,15 @@ import java.util.Map;
 
     private static boolean isConcretePowder(ItemEntity itemEntity)
     {
-        return (Block.getBlockFromItem(itemEntity.getItem().getItem()) instanceof ConcretePowderBlock);
+        return (Block.byItem(itemEntity.getItem().getItem()) instanceof ConcretePowderBlock);
     }
 
     @SubscribeEvent public static void worldTickEvent(TickEvent.WorldTickEvent event)
     {
-        itemEntityCheck((ServerWorld) event.world);
+        itemEntityCheck((ServerLevel) event.world);
     }
 
-    private static void itemEntityCheck(ServerWorld world)
+    private static void itemEntityCheck(ServerLevel world)
     {
         if ((Config.SERVER.getConversionCheckDelay() <= ++lastCheck))
         {
@@ -91,7 +92,7 @@ import java.util.Map;
     private static void convertEntity(ItemEntity itemEntity)
     {
         ItemStack stack = itemEntity.getItem();
-        Block block = getPowderConverted(Block.getBlockFromItem(stack.getItem()));
+        Block block = getPowderConverted(Block.byItem(stack.getItem()));
         if (block != null)
         {
             itemEntity.setItem(new ItemStack(block, stack.getCount()));
@@ -106,6 +107,6 @@ import java.util.Map;
         {
             return null;
         }
-        return concretePowderBlock.solidifiedState.getBlock();
+        return concretePowderBlock.concrete.getBlock();
     }
 }

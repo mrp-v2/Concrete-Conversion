@@ -1,12 +1,13 @@
 package mrp_v2.concreteconversion.server;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+
 import mrp_v2.concreteconversion.ConcreteConversion;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 @Mod.EventBusSubscriber(modid = ConcreteConversion.ID, bus = Mod.EventBusSubscriber.Bus.MOD) public class Config
 {
@@ -56,7 +57,7 @@ import org.apache.logging.log4j.LogManager;
         builder.pop();
     }
 
-    @SubscribeEvent public static void onLoad(final ModConfig.Loading configEvent)
+    @SubscribeEvent public static void onLoad(final ModConfigEvent.Loading configEvent)
     {
         LogManager.getLogger()
                 .debug("Loaded Concrete Conversion config file {}", configEvent.getConfig().getFileName());
@@ -71,7 +72,7 @@ import org.apache.logging.log4j.LogManager;
         this.dvcm = this.disableVanillaConversionMechanic.get();
     }
 
-    @SubscribeEvent public static void onFileChange(final ModConfig.Reloading configEvent)
+    @SubscribeEvent public static void onFileChange(final ModConfigEvent.Reloading configEvent)
     {
         LogManager.getLogger().debug("Concrete Conversion config just got changed on the file system!");
         SERVER.updateValues();
