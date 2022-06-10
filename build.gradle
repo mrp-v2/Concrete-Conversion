@@ -17,10 +17,11 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -78,6 +79,16 @@ minecraft {
     }
 }
 
+mixin {
+    add sourceSets.main, "effectsleft.refmap.json"
+
+    // Sets up the mixin config; this gets added to run configurations and the manifest in the final jar
+    config archivesBaseName + '.mixins.json'
+
+    // Enables exporting mixin-changed classes to .mixin.out in the run folder
+    debug.export = true
+}
+
 publishing {
     repositories {
         maven {
@@ -131,6 +142,8 @@ task regenerateUpdateJson {
 dependencies {
     minecraft "net.minecraftforge:forge:${mcVersion}-${forgeVersion}"
 
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+
     processResources.setDuplicatesStrategy(DuplicatesStrategy.WARN)
 }
 
@@ -162,9 +175,10 @@ processResources {
     inputs.property 'author', authors
     inputs.property 'updateURL', updateURL
     inputs.property 'issuesURL', issuesURL
-    String[] files = new String[2]
+    String[] files = new String[3]
     files[0] = 'META-INF/mods.toml'
     files[1] = 'pack.mcmeta'
+    files[2] = 'concreteconversion.mixins.json'
     from(sourceSets.main.resources.srcDirs) {
         include files
         expand 'version': project.version, 'modId': modId, 'forgeMajor': forgeMajor, 'mcVersion': mcVersion,
@@ -176,9 +190,3 @@ processResources {
         exclude files
     }
 }
-
-/*apply plugin: 'org.spongepowered.mixin'
-
-mixin {
-    add sourceSets.main, "${modId}.refmap.json"
-}*/
