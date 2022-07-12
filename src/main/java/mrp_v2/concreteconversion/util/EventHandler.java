@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
     {
         if (!event.getEntity().getCommandSenderWorld().isClientSide())
         {
-            addPlayerThrownItemEntity(event.getEntityItem());
+            addPlayerThrownItemEntity(event.getEntity());
         }
     }
 
@@ -45,9 +45,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
         return (Block.byItem(itemEntity.getItem().getItem()) instanceof ConcretePowderBlock);
     }
 
-    @SubscribeEvent public static void worldTickEvent(TickEvent.WorldTickEvent event)
+    @SubscribeEvent public static void worldTickEvent(TickEvent.LevelTickEvent event)
     {
-        itemEntityCheck((ServerLevel) event.world);
+        itemEntityCheck((ServerLevel) event.level);
     }
 
     private static void itemEntityCheck(ServerLevel world)
