@@ -80,8 +80,6 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "effectsleft.refmap.json"
-
     // Sets up the mixin config; this gets added to run configurations and the manifest in the final jar
     config archivesBaseName + '.mixins.json'
 

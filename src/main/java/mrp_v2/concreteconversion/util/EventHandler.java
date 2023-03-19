@@ -47,7 +47,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
     @SubscribeEvent public static void worldTickEvent(TickEvent.LevelTickEvent event)
     {
-        itemEntityCheck((ServerLevel) event.level);
+    	if (event.level instanceof ServerLevel)
+    		itemEntityCheck((ServerLevel) event.level);
     }
 
     private static void itemEntityCheck(ServerLevel world)
