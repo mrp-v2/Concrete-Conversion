@@ -25,7 +25,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-String mcVersion = version.split('-')[0]
+String mcVersion = mapping.split('\\|')[1]
 if (forgeVersion == 'latest' || forgeVersion == 'recommended')
 {
     println 'Grabbing ' + forgeVersion + ' forge version for MC ' + mcVersion

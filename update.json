@@ -9,9 +9,9 @@
       "1.18-recommended": "1.18-6.1.0.0-forge",
       "1.19-latest": "1.19-6.1.0.0-forge",
       "1.19-recommended": "1.19-6.1.0.0-forge",
-      "1.19.4-latest": "1.19.4-6.1.0.0-forge",
-      "1.19.4-recommended": "1.19.4-6.1.0.0-forge",
-      "latest": "1.19.4-6.1.0.0-forge",
-      "recommended": "1.19.4-6.1.0.0-forge"
+      "1.19.4-latest": "1.19.4-6.1.0.2-forge",
+      "1.19.4-recommended": "1.19.4-6.1.0.2-forge",
+      "latest": "1.19.4-6.1.0.2-forge",
+      "recommended": "1.19.4-6.1.0.2-forge"
     }
 }
