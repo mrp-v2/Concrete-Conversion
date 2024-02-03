@@ -1,0 +1,46 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${mod_version}",
+    "name": "${mod_name}",
+    "description": "${mod_desc}",
+    "authors": [ "${mod_author}" ],
+    "contact": {
+        "homepage": "${mod_homepage}",
+        "sources": "${mod_source}",
+        "issues": "${mod_issues}"
+    },
+    "license": "${mod_license}",
+    "icon": "logo.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "mrp_v2.concreteconversion.ConcreteConversion"
+        ],
+        "fabric-datagen": [
+            "mrp_v2.concreteconversion.datagen.DataGeneration"
+        ]
+    },
+    "mixins": [
+        "concreteconversion.mixins.json",
+        "concreteconversion.fabric.mixins.json"
+    ],
+    "accessWidener": "concreteconversion.accesswidener",
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric": "*",
+        "minecraft": "${minecraft_x_version}"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.discord": "https://discord.gg/7DDsHfQ",
+                "modmenu.guilded": "https://guilded.gg/i/Wkn138B2"
+            }
+        },
+        "configured": {
+            "background": "minecraft:textures/block/blue_concrete.png"
+        }
+    }
+}
+  

@@ -1,190 +1,102 @@
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import groovy.json.JsonSlurper
+plugins {
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+}
 
-buildscript {
-    repositories {
-        maven {
-            url = 'https://maven.minecraftforge.net'
+def forge_loader_version = "${forge_version.takeWhile { it != '.' }}"
+
+def minecraft_x_version = "${minecraft_version}"
+
+if (minecraft_x_version.count('.') >= 2) {
+    minecraft_x_version = minecraft_version.substring(0, minecraft_version.length() - 1) + "x"
+} else {
+    minecraft_x_version = minecraftVersion + '.x'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    java.withSourcesJar()
+    java.withJavadocJar()
+        
+    jar {
+        from(rootProject.file("LICENSE")) {
+            rename { "${it}_${mod_name}" }
         }
-        jcenter()
+        manifest {
+            attributes([
+                'Specification-Title'     : mod_name,
+                'Specification-Vendor'    : mod_author,
+                'Specification-Version'   : project.jar.archiveVersion,
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : mod_author,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                'Timestamp'               : System.currentTimeMillis(),
+                'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+                'Built-On-Minecraft'      : minecraft_version
+            ])
+        }
+    }
+
+    sourcesJar {
+        from(rootProject.file("LICENSE")) {
+            rename { "${it}_${mod_name}" }
+        }
+    }
+
+    repositories {
         mavenCentral()
         maven {
+            name = 'Sponge / Mixin'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
-    }
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'maven-publish'
-apply plugin: 'eclipse'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-String mcVersion = mapping.split('\\|')[1]
-if (forgeVersion == 'latest' || forgeVersion == 'recommended')
-{
-    println 'Grabbing ' + forgeVersion + ' forge version for MC ' + mcVersion
-    forgeVersion = new JsonSlurper().
-            parse(new URL('https://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json')).
-            get('promos').get(mcVersion + '-' + forgeVersion)
-    assert forgeVersion != null
-}
-String capitalizedModId = modDisplayName.replace(' ', '')
-String modId = capitalizedModId.toLowerCase()
-String forgeMajor = forgeVersion.split('\\.')[0]
-String mcNextVersion = '1.' + ((mcVersion.split('\\.')[1] as int) + 1)
-String homepageURL = "https://www.curseforge.com/minecraft/mc-mods/${modDisplayName.replace(' ', '-').toLowerCase()}"
-String issuesURL = "${homepageURL}/issues"
-String updateURL = "https://raw.githubusercontent.com/mrp-v2/${capitalizedModId}/master/update.json"
-archivesBaseName = modId
-group = "${author}.${archivesBaseName}"
-
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' +
-        System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-println('Minecraft: ' + mcVersion + ' Forge: ' + forgeVersion + ' Mapping: ' + mapping + ' Mod: ' + version)
-
-minecraft {
-    accessTransformer = file 'src/main/resources/META-INF/accesstransformer.cfg'
-    mappings channel: mapping.split('\\|')[0], version: mapping.split('\\|')[1]
-    runs {
-        client {
-            property 'mixin.env.disableRefMap', 'true'
-            workingDirectory project.file('run')
-            arg '-mixin.config=' + archivesBaseName + '.mixins.json'
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                concreteconversion {
-                    source sourceSets.main
-                }
-            }
-        }
-        server {
-            property 'mixin.env.disableRefMap', 'true'
-            workingDirectory project.file('run')
-            arg '-mixin.config=' + archivesBaseName + '.mixins.json'
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                concreteconversion {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
-}
-
-mixin {
-    // Sets up the mixin config; this gets added to run configurations and the manifest in the final jar
-    config archivesBaseName + '.mixins.json'
-
-    // Enables exporting mixin-changed classes to .mixin.out in the run folder
-    debug.export = true
-}
-
-publishing {
-    repositories {
         maven {
-            name = 'GitHubPackages'
-            url = uri('https://maven.pkg.github.com/mrp-v2/' + capitalizedModId)
-            credentials {
-                username = 'mrp-v2'
-                password = System.getenv('GITHUB_TOKEN')
-            }
+            name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
+            url = 'https://maven.blamejared.com'
+        }
+        maven {
+            name = 'TerraformersMC / Mod Menu'
+            url = 'https://maven.terraformersmc.com/'
         }
     }
-    publications {
-        gpr(MavenPublication) {
-            artifactId modId
-            artifact jar
+
+    tasks.withType(JavaCompile).configureEach {
+    
+        it.options.encoding = 'UTF-8'
+        it.options.getRelease().set(17)
+    }
+
+    processResources {
+        def expandProps = [
+                "group": project.group,
+                "version": mod_version,
+                "minecraft_version": minecraft_version,
+                "minecraft_x_version": minecraft_x_version,
+                "forge_version": forge_version,
+                "forge_loader_version": forge_loader_version,
+                "fabric_loader_version": fabric_loader_version,
+                "neoforge_version": neoforge_version,
+                "neoforge_loader_version": neoforge_loader_version,
+                "mod_version": mod_version,
+                "mod_name": mod_name,
+                "mod_author": mod_author,
+                "mod_id": mod_id,
+                "mod_homepage": mod_homepage,
+                "mod_source": mod_source,
+                "mod_issues": mod_issues,
+                "mod_desc": mod_desc,
+                "mod_license": mod_license
+        ]
+
+        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
+            expand expandProps
         }
+        inputs.properties(expandProps)
     }
-}
 
-task regenerateUpdateJson {
-    doLast {
-        String updateJsonLocation = './update.json'
-        println 'Regenerating update.json from version: ' + version
-        JsonObject newUpdateJson = new JsonObject()
-        newUpdateJson.addProperty('homepage', homepageURL)
-        JsonObject promos = new JsonObject()
-        newUpdateJson.add('promos', promos)
-        File oldUpdateJsonFile = new File(updateJsonLocation)
-        if (oldUpdateJsonFile.exists())
-        {
-            JsonObject oldUpdateJson = new JsonParser().
-                    parse(new File(updateJsonLocation).text).getAsJsonObject().
-                    getAsJsonObject('promos')
-            for (Map.Entry<String, JsonElement> entry : oldUpdateJson.entrySet())
-            {
-                promos.addProperty(entry.key, entry.value.asString)
-            }
-        }
-        promos.addProperty("${mcVersion}-recommended", (String) version)
-        promos.addProperty("${mcVersion}-latest", (String) version)
-        if (mcVersion == new JsonSlurper().parse(new File('../secrets.json')).get('latest-mc-version'))
-        {
-            promos.addProperty("recommended", (String) version)
-            promos.addProperty("latest", (String) version)
-        }
-        String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(newUpdateJson)
-        new File(updateJsonLocation).text = jsonString
-    }
-}
+    tasks.withType(GenerateModuleMetadata).configureEach {
 
-dependencies {
-    minecraft "net.minecraftforge:forge:${mcVersion}-${forgeVersion}"
-
-    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-
-    processResources.setDuplicatesStrategy(DuplicatesStrategy.WARN)
-}
-
-jar {
-    manifest {
-        attributes(['Specification-Title'     : archivesBaseName,
-                    'Specification-Vendor'    : author,
-                    'Specification-Version'   : '1', // We are version 1 of ourselves
-                    'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : "${version}",
-                    'Implementation-Vendor'   : author,
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    'MixinConfigs'            : "${modId}.mixins.json"])
-    }
-}
-
-jar.finalizedBy('reobfJar')
-
-processResources {
-    inputs.property 'version', project.version
-    inputs.property 'modId', modId
-    inputs.property 'forgeMajor', forgeMajor
-    inputs.property 'mcVersion', mcVersion
-    inputs.property 'mcNextVersion', mcNextVersion
-    inputs.property 'homepageURL', homepageURL
-    inputs.property 'modDisplayName', modDisplayName
-    inputs.property 'capitalizedModId', capitalizedModId
-    inputs.property 'modDescription', modDescription
-    inputs.property 'author', authors
-    inputs.property 'updateURL', updateURL
-    inputs.property 'issuesURL', issuesURL
-    String[] files = new String[3]
-    files[0] = 'META-INF/mods.toml'
-    files[1] = 'pack.mcmeta'
-    files[2] = 'concreteconversion.mixins.json'
-    from(sourceSets.main.resources.srcDirs) {
-        include files
-        expand 'version': project.version, 'modId': modId, 'forgeMajor': forgeMajor, 'mcVersion': mcVersion,
-                'mcNextVersion': mcNextVersion, 'homepageURL': homepageURL, 'modDisplayName': modDisplayName,
-                'capitalizedModId': capitalizedModId, 'modDescription': modDescription, 'author': authors,
-                'updateURL': updateURL, 'issuesURL': issuesURL
-    }
-    from(sourceSets.main.resources.srcDirs) {
-        exclude files
+        enabled = false
     }
 }

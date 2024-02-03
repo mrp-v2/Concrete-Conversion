@@ -8,11 +8,17 @@
 
 # gradle
 /build/
+*/build/
 /.gradle/
+*/.gradle/
 
 # other
 /run/
+*/run/
+*/runs/
 /logs/
+*/src/generated/resources/.cache/
+*/src/main/generated/.cache/
 
-#O S generated files
+#OS generated files
 *.DS_Store
