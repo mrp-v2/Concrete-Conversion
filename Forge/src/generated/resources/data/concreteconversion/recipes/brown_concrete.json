@@ -7,5 +7,7 @@
   "ingredient": {
     "item": "minecraft:brown_concrete"
   },
-  "result": "minecraft:brown_concrete_powder"
+  "result": {
+    "id": "minecraft:brown_concrete_powder"
+  }
 }

@@ -4,12 +4,11 @@ import mrp_v2.concreteconversion.ConcreteConversionCommon;
 import mrp_v2.concreteconversion.event.ConcreteEvents;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
-@Mod.EventBusSubscriber(modid = ConcreteConversionCommon.ID)
+@EventBusSubscriber(modid = ConcreteConversionCommon.ID, bus = EventBusSubscriber.Bus.GAME)
 public class EventHandler {
 
     @SubscribeEvent
@@ -19,8 +18,8 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void worldTickEvent(TickEvent.LevelTickEvent event) {
-        if (event.side == LogicalSide.SERVER)
-            ConcreteEvents.SERVER_LEVEL_TICK.post().handle((ServerLevel) event.level);
+    public static void worldTickEvent(LevelTickEvent.Pre event) {
+        if (!event.getLevel().isClientSide())
+            ConcreteEvents.SERVER_LEVEL_TICK.post().handle((ServerLevel) event.getLevel());
     }
 }

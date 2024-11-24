@@ -1,6 +1,7 @@
 package mrp_v2.concreteconversion.datagen;
 
 import mrp_v2.concreteconversion.ConcreteConversionCommon;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -11,6 +12,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 @Mod.EventBusSubscriber(modid = ConcreteConversionCommon.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGeneration {
 
@@ -19,14 +22,14 @@ public class DataGeneration {
         DataGenerator gen = event.getGenerator();
         PackOutput packOutput = gen.getPackOutput();
 
-        gen.addProvider(event.includeServer(), new RecipeProvider(packOutput));
+        gen.addProvider(event.includeServer(), new RecipeProvider(packOutput, event.getLookupProvider()));
         gen.addProvider(event.includeClient(), new LanguageProvider(packOutput, "en_us"));
     }
 
     public static class RecipeProvider extends VanillaRecipeProvider implements IConditionBuilder {
 
-        public RecipeProvider(PackOutput output) {
-            super(output);
+        public RecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+            super(output, lookupProvider);
         }
 
         @Override

@@ -7,5 +7,8 @@
   "ingredient": {
     "item": "minecraft:orange_concrete"
   },
-  "result": "minecraft:orange_concrete_powder"
+  "result": {
+    "count": 1,
+    "id": "minecraft:orange_concrete_powder"
+  }
 }

@@ -5,8 +5,11 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CompletableFuture;
 
 public class DataGeneration implements DataGeneratorEntrypoint {
 
@@ -20,8 +23,8 @@ public class DataGeneration implements DataGeneratorEntrypoint {
 
     public static class RecipeProvider extends FabricRecipeProvider {
 
-        public RecipeProvider(FabricDataOutput output) {
-            super(output);
+        public RecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+            super(output ,registriesFuture);
         }
 
         @Override
@@ -32,12 +35,12 @@ public class DataGeneration implements DataGeneratorEntrypoint {
 
     public static class LanguageProvider extends FabricLanguageProvider {
 
-        public LanguageProvider(FabricDataOutput output) {
-            super(output, "en_us");
+        public LanguageProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+            super(output, "en_us", registriesFuture);
         }
 
         @Override
-        public void generateTranslations(TranslationBuilder builder) {
+        public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder builder) {
             ConcreteLanguage.english(builder::add);
         }
     }
