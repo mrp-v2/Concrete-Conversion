@@ -21,6 +21,6 @@ public class ConcreteRecipes {
     public static void generatePowderFromConcreteRecipes(RecipeOutput consumer, Function<Block, Criterion<InventoryChangeTrigger.TriggerInstance>> has) {
         for (Map.Entry<ResourceKey<Block>, Block> block : BuiltInRegistries.BLOCK.entrySet())
             if (block.getValue() instanceof ConcretePowderBlock)
-                SimpleCookingRecipeBuilder.smelting(Ingredient.of(((ConcretePowderBlock) block.getValue()).concrete), RecipeCategory.BUILDING_BLOCKS, block.getValue(), 0.0F, 200).group("cooking_concrete").unlockedBy("has_concrete", has.apply(((ConcretePowderBlock) block.getValue()).concrete)).save(consumer, new ResourceLocation(ConcreteConversionCommon.ID, BuiltInRegistries.BLOCK.getKey(((ConcretePowderBlock) block.getValue()).concrete).getPath()));
+                SimpleCookingRecipeBuilder.smelting(Ingredient.of(((ConcretePowderBlock) block.getValue()).concrete), RecipeCategory.BUILDING_BLOCKS, block.getValue(), 0.0F, 200).group("cooking_concrete").unlockedBy("has_concrete", has.apply(((ConcretePowderBlock) block.getValue()).concrete)).save(consumer, ResourceLocation.fromNamespaceAndPath(ConcreteConversionCommon.ID, BuiltInRegistries.BLOCK.getKey(((ConcretePowderBlock) block.getValue()).concrete).getPath()));
     }
 }
