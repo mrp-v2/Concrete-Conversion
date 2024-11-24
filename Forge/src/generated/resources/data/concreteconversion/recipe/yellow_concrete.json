@@ -4,9 +4,7 @@
   "cookingtime": 200,
   "experience": 0.0,
   "group": "cooking_concrete",
-  "ingredient": {
-    "item": "minecraft:yellow_concrete"
-  },
+  "ingredient": "minecraft:yellow_concrete",
   "result": {
     "id": "minecraft:yellow_concrete_powder"
   }

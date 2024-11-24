@@ -4,9 +4,7 @@
   "cookingtime": 200,
   "experience": 0.0,
   "group": "cooking_concrete",
-  "ingredient": {
-    "item": "minecraft:magenta_concrete"
-  },
+  "ingredient": "minecraft:magenta_concrete",
   "result": {
     "id": "minecraft:magenta_concrete_powder"
   }

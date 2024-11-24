@@ -1,5 +1,6 @@
 package mrp_v2.concreteconversion.datagen;
 
+import mrp_v2.concreteconversion.ConcreteConversionCommon;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -7,7 +8,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,12 +24,22 @@ public class DataGeneration implements DataGeneratorEntrypoint {
     public static class RecipeProvider extends FabricRecipeProvider {
 
         public RecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-            super(output ,registriesFuture);
+            super(output, registriesFuture);
         }
 
         @Override
-        public void buildRecipes(@NotNull RecipeOutput exporter) {
-            ConcreteRecipes.generatePowderFromConcreteRecipes(exporter, RecipeProvider::has);
+        public net.minecraft.data.recipes.RecipeProvider createRecipeProvider(HolderLookup.Provider registriesFuture, RecipeOutput exporter) {
+            return new net.minecraft.data.recipes.RecipeProvider(registriesFuture, exporter) {
+                @Override
+                public void buildRecipes() {
+                    ConcreteRecipes.generatePowderFromConcreteRecipes(exporter, this::has);
+                }
+            };
+        }
+
+        @Override
+        public String getName() {
+            return ConcreteConversionCommon.ID + " recipes";
         }
     }
 
